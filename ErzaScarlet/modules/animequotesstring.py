@@ -1,0 +1,30 @@
+#MADE BY TG = @SOHAILKHAN_ANIME | GITHUB NOOBSOHAIL 
+#FAIRY TAIL QUOTES
+ANIMEQUOTES=(
+"If you truly desire greatness, you must first know what makes you weak!",
+"Magic is not meant to be used to kill people... but without power we can't protect the ones we love.",
+"Even if I can't see you... Even if we are separated far from each other... I'll always be watching you. I'll definitely watch over you forever",
+"It's only the end if you give up!",
+"Do whatever you think is right. That's the way of the Fairy Tale mages.",
+"Comrade isn't simply a word. Comrades are about heart. It's the unconditional trust in your partners. Please, feel free to lean on me... and I too, will lean on you as well.",
+"The mistakes people make are usually labeled as experience. But with a true mistake, there will be no experience gained.",
+"Freedom can be found at the bottom of your heart.",
+"We'll stop it, even if my body crumbles to bits, I'll stop it with my soul!",
+"There are people in this world that enjoy being alone, but there isn't a single person that can bear solitude.",
+"It's always sad to part with those whom you love, but your companions will help you bear that sadness." ,
+"It's not a crime! Caring about your friends is not a crime!",
+"If one really wants to change the world... they have to do it with their own hands!",
+"I'll do what I want till the end. Cut me down if you want.",
+"In that case, you have nothing to fear. Mistakes aren't made by locking your feelings and holding back... They're made while wearing your heart on your sleeve.",
+"We know our weakness. Now what will we do? We'll get stronger! We'll get up and fight!",
+"If lives were lost today, then lives were also born. How important each day is... depends on how important you feel it is to you.",
+"You don't need a reason to cry. All you need to feel is the warmth that dwells in your chest.",
+"Care too little, you lose them. Care too much, you get hurt.",
+"Moving on doesn't mean you forget about things. It just means you have to accept what's happened and continue living.",
+"Save the tears for when we win.",
+"I don't want to run away by myself, because no matter what, I'd rather be together with everyone",
+"You don't die for your friends, you live for them",
+"We’ve got our comrades right here! There’s nothing to fear! We're not alone!",
+"Fear isn’t ‘evil’, it only allows us to learn our own weaknesses. When we learn our weakness, people can grow stronger and kinder.",
+  
+)

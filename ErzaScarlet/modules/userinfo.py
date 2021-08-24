@@ -20,11 +20,12 @@ from ErzaScarlet.__main__ import STATS, TOKEN, USER_INFO
 import ErzaScarlet.modules.sql.userinfo_sql as sql
 from ErzaScarlet.modules.disable import DisableAbleCommandHandler
 from ErzaScarlet.modules.sql.global_bans_sql import is_user_gbanned
-from ErzaScarlet.modules.sql.afk_sql import is_user_afk, afk_reason
+from ErzaScarlet.modules.sql.afk_sql import is_afk, check_afk_status
 from ErzaScarlet.modules.sql.users_sql import get_user_num_chats
+from ErzaScarlet.modules.sql.feds_sql import get_user_fbanlist
 from ErzaScarlet.modules.helper_funcs.chat_status import sudo_plus
 from ErzaScarlet.modules.helper_funcs.extraction import extract_user
-from ErzaScarlet import telethn as ErzaTelethonClient, TIGERS, DRAGONS, DEMONS
+from ErzaScarlet import telethn as ErzaScarletTelethonClient, TIGERS, DRAGONS, DEMONS
 
 
 def no_by_per(totalhp, percentage):
@@ -71,13 +72,11 @@ def hpmanager(user):
         if not sql.get_user_bio(user.id):
             new_hp -= no_by_per(total_hp, 10)
 
-        if is_user_afk(user.id):
-
-            afkst = afk_reason(user.id)
-
+        if is_afk(user.id):
+            afkst = check_afk_status(user.id)
             # if user is afk and no reason then decrease 7%
             # else if reason exist decrease 5%
-            if not afkst:
+            if not afkst.reason:
                 new_hp -= no_by_per(total_hp, 7)
             else:
                 new_hp -= no_by_per(total_hp, 5)
@@ -153,7 +152,7 @@ def get_id(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.HTML)
 
 
-@ErzaTelethonClient.on(
+@ErzaScarletTelethonClient.on(
     events.NewMessage(
         pattern='/ginfo ',
         from_users=(TIGERS or []) + (DRAGONS or []) + (DEMONS or [])))
@@ -226,9 +225,9 @@ def info(update: Update, context: CallbackContext):
         return
 
     rep = message.reply_text(
-        "<code>Appraising...</code>", parse_mode=ParseMode.HTML)
+        "<code>Checking Fairy Tail Guild Database...</code>", parse_mode=ParseMode.HTML)
 
-    text = (f"╒═══「<b> Appraisal results:</b> 」\n"
+    text = (f"╔══〔<b> INFO </b>〕\n"
             f"ID: <code>{user.id}</code>\n"
             f"First Name: {html.escape(user.first_name)}")
 
@@ -243,7 +242,7 @@ def info(update: Update, context: CallbackContext):
     if chat.type != "private" and user_id != bot.id:
         _stext = "\nPresence: <code>{}</code>"
 
-        afk_st = is_user_afk(user.id)
+        afk_st = is_afk(user.id)
         if afk_st:
             text += _stext.format("AFK")
         else:
@@ -252,12 +251,12 @@ def info(update: Update, context: CallbackContext):
                 if status in {"left", "kicked"}:
                     text += _stext.format("Not here")
                 elif status == "member":
-                    text += _stext.format("Detected")
+                    text += _stext.format("Parasite")
                 elif status in {"administrator", "creator"}:
-                    text += _stext.format("Admin")
+                    text += _stext.format("Member of Nines")
     if user_id not in [bot.id, 777000, 1087968824]:
         userhp = hpmanager(user)
-        text += f"\n\n<b>Health:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]"
+        text += f"\n\n<b>Life Force:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[ {make_bar(int(userhp['percentage']))} | <code>{userhp['percentage']}%</code> ]"
 
     try:
         spamwtc = sw.get_ban(int(user.id))
@@ -273,26 +272,25 @@ def info(update: Update, context: CallbackContext):
     disaster_level_present = False
 
     if user.id == OWNER_ID:
-        text += "\n\nThe Disaster level of this person is 'God'."
+        text += "\n\n<b>Gildart!</b>"
         disaster_level_present = True
     elif user.id in DEV_USERS:
-        text += "\n\nThis user is Rias Gremory's BF'."
+        text += "\n\n<b>Natsu!</b>"
         disaster_level_present = True
     elif user.id in DRAGONS:
-        text += "\n\nThe Disaster level of this person is 'Dragon'."
+        text += "\n\n<b>Erza!</b>"
         disaster_level_present = True
     elif user.id in DEMONS:
-        text += "\n\nThe Disaster level of this person is 'Demon'."
+        text += "\n\n<b>Gray!</b>"
         disaster_level_present = True
     elif user.id in TIGERS:
-        text += "\n\nThe Disaster level of this person is 'Tiger'."
+        text += "\n\n<b>Mirajane!</b>"
         disaster_level_present = True
     elif user.id in WOLVES:
-        text += "\n\nThe Disaster level of this person is 'Wolf'."
+        text += "\n\n<b>Laxus!</b>"
         disaster_level_present = True
 
     if disaster_level_present:
-
         text += ' [<a href="https://t.me/ErzaScarlet_Justice/19">?</a>]'.format(
             bot.username)
 
@@ -404,12 +402,8 @@ def set_about_me(update: Update, context: CallbackContext):
 @run_async
 @sudo_plus
 def stats(update: Update, context: CallbackContext):
-    process = subprocess.Popen(
-        "neofetch --stdout", shell=True, text=True, stdout=subprocess.PIPE)
-    output = process.communicate()[0]
-    stats = "<b>Current stats:</b>\n" + "\n" + output + "\n".join(
-        [mod.__stats__() for mod in STATS])
-    result = re.sub(r'(\d+)', r'<code>\1</code>', stats)
+    stats = "<b>📊 Current stats:</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
+    result = re.sub(r"(\d+)", r"<code>\1</code>", stats)
     update.effective_message.reply_text(result, parse_mode=ParseMode.HTML)
 
 
@@ -463,7 +457,7 @@ def set_about_bio(update: Update, context: CallbackContext):
 
         if user_id == bot.id and sender_id not in DEV_USERS:
             message.reply_text(
-                "Erm... yeah, I only trust Heroes Association to set my bio.")
+                "Erm... yeah, I only trust Moderators to set my bio.")
             return
 
         text = message.text
@@ -496,29 +490,28 @@ def __user_info__(user_id):
     return result
 
 
+
 __help__ = """
 *ID:*
- ✪ /id*:* get the current group id. If used by replying to a message, gets that user's id.
-
+ • `/id`*:* get the current group id. If used by replying to a message, gets that user's id.
+ • `/gifid`*:* reply to a gif to me to tell you its file ID.
 *Self addded information:* 
- ✪ /setme <text>*:* will set your info
- ✪ /me*:* will get your or another user's info.
-_Examples:_
+ • `/setme <text>`*:* will set your info
+ • `/me`*:* will get your or another user's info.
+Examples:
  `/setme I am a wolf.`
  `/me @username(defaults to yours if no user specified)`
-
 *Information others add on you:* 
- ✪ /bio*:* will get your or another user's bio. This cannot be set by yourself.
- ✪ /setbio <text>*:* while replying, will save another user's bio 
-_Examples:_
+ • `/bio`*:* will get your or another user's bio. This cannot be set by yourself.
+• `/setbio <text>`*:* while replying, will save another user's bio 
+Examples:
  `/bio @username(defaults to yours if not specified).`
  `/setbio This user is a wolf` (reply to the user)
-
 *Overall Information about you:*
- ✪ /info*:* get information about a user. 
+ • `/info`*:* get information about a user. 
  
-*What is that health thingy?*
- Come and see [HP System explained](https://t.me/ErzaScarlet_Justice/22)
+ *What Health means?*
+  Come and see [HP System explained](https://t.me/ErzaScarletUpdates/24).
 """
 
 SET_BIO_HANDLER = DisableAbleCommandHandler("setbio", set_about_bio)
@@ -527,7 +520,7 @@ GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio)
 STATS_HANDLER = CommandHandler("stats", stats)
 ID_HANDLER = DisableAbleCommandHandler("id", get_id)
 GIFID_HANDLER = DisableAbleCommandHandler("gifid", gifid)
-INFO_HANDLER = DisableAbleCommandHandler(("info", "book"), info)
+INFO_HANDLER = DisableAbleCommandHandler(("info", "book", "data"), info)
 
 SET_ABOUT_HANDLER = DisableAbleCommandHandler("setme", set_about_me)
 GET_ABOUT_HANDLER = DisableAbleCommandHandler("me", about_me)
@@ -541,7 +534,7 @@ dispatcher.add_handler(GET_BIO_HANDLER)
 dispatcher.add_handler(SET_ABOUT_HANDLER)
 dispatcher.add_handler(GET_ABOUT_HANDLER)
 
-__mod_name__ = "Bios/Abouts"
+__mod_name__ = "Info"
 __command_list__ = ["setbio", "bio", "setme", "me", "info"]
 __handlers__ = [
     ID_HANDLER, GIFID_HANDLER, INFO_HANDLER, SET_BIO_HANDLER, GET_BIO_HANDLER,

@@ -59,12 +59,12 @@ from ErzaScarlet.modules.helper_funcs.readable_time import get_readable_time
 
 
 PM_START_TEXT = """
-Hey there, {}!
+Hey there, I am Truly Yours Cute {} Bot!
 Hey I Am {}
 
 I can manage your group easily with many feautres and games. **Just add me in your group to use me.
 
-*Status*: [Working Fine](https://t.me/ErzaScarlet_Justice)
+*Status*: [Working Fine](https://t.me/Marin_Support)
 *Life Force*: `100%`
 
 Too see commands send /help .
@@ -72,7 +72,7 @@ Too see commands send /help .
 
 
 HELP_STRINGS = """
-*Main Commands :* [ʕ·ᴥ·ʔ](https://telegra.ph/file/f14c63556a46189167eb7.jpg)
+*Main Commands :* [ʕ·ᴥ·ʔ](https://telegra.ph/file/389b7cbae62494e9578bc.jpg)
 ✪ /start: Starts me! You've probably already used this.
 ✪ /help: Click this, I'll let you know about myself!
 ✪ /settings: 
@@ -80,9 +80,9 @@ HELP_STRINGS = """
    ◔ in a Group: will redirect you to pm, with all that chat's settings.
 """
 
-ErzaScarlet_IMG = "https://indianime.com/wp-content/uploads/2021/08/photo_2021-08-21_12-17-22.jpg)"
-ErzaScarlet_YAWN = "https://telegra.ph/file/baad9f6111310638c438c.mp4" #"https://telegra.ph/file/df5c1103ab9d539ab760d.gif"
-YAWN_CPT = "I am Awake ! ~ 💤"
+ErzaScarlet_IMG = "https://telegra.ph/file/389b7cbae62494e9578bc.jpg)"
+ErzaScarlet_YAWN = "https://telegra.ph/file/389b7cbae62494e9578bc.jpg" #"https://telegra.ph/file/389b7cbae62494e9578bc.jpg"
+YAWN_CPT = "Marin-Chan Is Awake ! ~ 💤"
 
 IMPORTED = {}
 MIGRATEABLE = []
@@ -206,7 +206,7 @@ def start(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text="Add Erza In Your Group",
+                                text="Add Marin In Your Group",
                                 url="t.me/{}?startgroup=true".format(
                                     context.bot.username,
                                 ),
@@ -218,24 +218,24 @@ def start(update: Update, context: CallbackContext):
                                 url=f"https://t.me/{SUPPORT_CHAT}",
                             ),
                             InlineKeyboardButton(
-                                text="Anime Group",
-                                url="https://t.me/indianimein",
+                                text="Off Topic Group",
+                                url="https://t.me/bestwalefriends",
                             ),
                         ],
                         [
                             InlineKeyboardButton(
-                                text="Anime Channel",
-                                url="https://t.me/indianimei",
+                                text="Owner/Master",
+                                url="https://t.me/im_the_ownerr",
                             ),
                             InlineKeyboardButton(
-                                text="Anime Index",
-                                url="https://t.me/IndiAnimeNetwork",
+                                text="1st dev",
+                                url="https://t.me/imibtihaz",
                             ),
                         ],
                         [
                             InlineKeyboardButton(
-                                text="IndiAnime Network",
-                                url="https://t.me/IndiAnimeNetwork",
+                                text="Tap Here",
+                                url="https://t.me/Telegram",
                             ),
                         ],
                     ],
